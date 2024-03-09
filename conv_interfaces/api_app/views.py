@@ -67,7 +67,7 @@ def getMovieRecommendations(request, otherparam, director, actor, genre):
             where_in_rec_list = 0
 
     if current_recs == []:
-        return JsonResponse({"fulfillmentResponse": {"messages": [{"text": {"text": ["No movies matching those details were found "+ genre + " " + director + " " + actor]}}]}})
+        return JsonResponse({"fulfillmentResponse": {"messages": [{"text": {"text": ["No movies matching those details were found "+ str(genre) + " " + str(director) + " " + str(actor)]}}]}})
     
     movie_details = f"I've found {len(current_recs)} movies for you. How does {current_recs[where_in_rec_list]['title']} sound? It has a rating of {round(current_recs[where_in_rec_list]['vote_average'],2)}."
     current_movie_id = current_recs[where_in_rec_list]['id']
