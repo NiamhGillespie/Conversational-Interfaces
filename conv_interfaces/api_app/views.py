@@ -64,7 +64,7 @@ def getMovieRecommendations(request, otherparam, director, actor, genre):
         #if no extra params are added we want to movie one forward in the rec list
         where_in_rec_list = where_in_rec_list + 1
         if where_in_rec_list >= len(current_recs) -1:
-            return JsonResponse({"fulfillmentResponse": {"messages": [{"text": {"text": ["Thats all the options I have for you."]}}]}})
+            where_in_rec_list = 0
 
     if current_recs == []:
         return JsonResponse({"fulfillmentResponse": {"messages": [{"text": {"text": ["No movies matching those details were found"]}}]}})
