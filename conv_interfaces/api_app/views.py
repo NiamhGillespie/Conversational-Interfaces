@@ -40,15 +40,16 @@ def getMovieRecommendations(request, otherparam, director, actor, genre):
     #if director != current_director or actor != current_actor or genre != current_genre:
     original_info = actor + " " + director + " " + genre 
     print([director, actor, genre])
-    if genre != "null":
+
+    if genre != "$session.params.genre" and genre != "null":
         genre = genre_dict[genre.lower()]
         api_query = api_query + f"&with_genres={genre}"
 
-    if director != "null":
+    if director != "$session.params.director" and director != "null":
         director = get_person_id(director)
         api_query = api_query + f"&with_crew={director}"
 
-    if actor != "null":
+    if actor != "$session.params.starring" and actor != "null":
         actor = get_person_id(actor)
         api_query = api_query + f"&with_cast={actor}"
 
