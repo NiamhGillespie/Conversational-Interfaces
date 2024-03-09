@@ -38,30 +38,28 @@ def getMovieRecommendations(request, otherparam, director, actor, genre):
     api_query = f'https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&api_key={api_key}'
 
     #if director != current_director or actor != current_actor or genre != current_genre:
+        
+    print([director, actor, genre])
+    if genre != "null":
+        genre = genre_dict[genre.lower()]
+        api_query = api_query + f"&with_genres={genre}"
+
     if director != "null":
         director = get_person_id(director)
-        if director != current_director:
-            api_query = api_query + f"&with_crew={director}"
+        api_query = api_query + f"&with_crew={director}"
 
     if actor != "null":
         actor = get_person_id(actor)
-        if actor != current_actor:
-            api_query = api_query + f"&with_cast={actor}"
-    
-    if genre != "null":
-        genre = genre_dict[genre.lower()]
-        if genre != current_genre:
-            api_query = api_query + f"&with_genres={genre}"
+        api_query = api_query + f"&with_cast={actor}"
 
     if director != current_director or actor != current_actor or genre != current_genre:    
         r = requests.get(api_query)
         current_recs = json.loads(r.text)['results']
-
         where_in_rec_list = 0
+
         current_director = director
         current_actor = actor
         current_genre = genre
-
     else:
         #if no extra params are added we want to movie one forward in the rec list
         where_in_rec_list = where_in_rec_list + 1
@@ -70,11 +68,10 @@ def getMovieRecommendations(request, otherparam, director, actor, genre):
 
     if current_recs == []:
         return JsonResponse({"fulfillmentResponse": {"messages": [{"text": {"text": ["No movies matching those details were found"]}}]}})
-        #return Response({"FulfillmentResponse": "No movies matching those details were found"})
     
     movie_details = f"I've found {len(current_recs)} movies for you. How does {current_recs[where_in_rec_list]['title']} sound? It has a rating of {round(current_recs[where_in_rec_list]['vote_average'],2)}."
     current_movie_id = current_recs[where_in_rec_list]['id']
-    
+
     return JsonResponse({"fulfillmentResponse": {"messages": [{"text": {"text": [movie_details]}}]}})
 
 def get_person_id(person_query):
@@ -82,9 +79,8 @@ def get_person_id(person_query):
     api_query = f'https://api.themoviedb.org/3/search/person?api_key={api_key}&language=en-US&query={person_query}'
     
     r = requests.get(api_query)
-    results = json.loads(r.text)["results"]
+    results = json.loads(r.text)['results']
     if results == []:
-        # no person with that name is the movie API database
         return None
     return results[0]['id']
 
@@ -157,5 +153,6 @@ def get_actor_names(actors):
     actor_names = []
     for actor in actors:
         actor_names.append(actor['name'])
+        print("ACTOR NAMES?")
     return actor_names
 
