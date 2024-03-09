@@ -38,7 +38,7 @@ def getMovieRecommendations(request, otherparam, director, actor, genre):
     api_query = f'https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&api_key={api_key}'
 
     #if director != current_director or actor != current_actor or genre != current_genre:
-        
+    original_info = actor + " " + director + " " + genre 
     print([director, actor, genre])
     if genre != "null":
         genre = genre_dict[genre.lower()]
@@ -67,7 +67,7 @@ def getMovieRecommendations(request, otherparam, director, actor, genre):
             where_in_rec_list = 0
 
     if current_recs == []:
-        return JsonResponse({"fulfillmentResponse": {"messages": [{"text": {"text": ["No movies matching those details were found "+ str(genre) + " " + str(director) + " " + str(actor)]}}]}})
+        return JsonResponse({"fulfillmentResponse": {"messages": [{"text": {"text": ["No movies matching those details were found "+ original_info]}}]}})
     
     movie_details = f"I've found {len(current_recs)} movies for you. How does {current_recs[where_in_rec_list]['title']} sound? It has a rating of {round(current_recs[where_in_rec_list]['vote_average'],2)}."
     current_movie_id = current_recs[where_in_rec_list]['id']
