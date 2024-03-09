@@ -65,15 +65,15 @@ def getMovieRecommendations(request, otherparam, director, actor, genre):
         #if no extra params are added we want to movie one forward in the rec list
         where_in_rec_list = where_in_rec_list + 1
         if where_in_rec_list >= len(current_recs) -1:
-            return {"FulfillmentResponse": Response("Thats all the options I have for you.")}
+            return Response({"FulfillmentResponse": "Thats all the options I have for you."})
 
     if current_recs == []:
-        return {"FulfillmentResponse": Response("No movies matching those details were found")}
+        return Response({"FulfillmentResponse": "No movies matching those details were found"})
     
     movie_details = f"I've found {len(current_recs)} movies for you. How does {current_recs[where_in_rec_list]['title']} sound? It has a rating of {round(current_recs[where_in_rec_list]['vote_average'],2)}."
     current_movie_id = current_recs[where_in_rec_list]['id']
     
-    return Response(movie_details)
+    return Response({"FulfillmentResponse": movie_details})
 
 def get_person_id(person_query):
     # find the person ID in the movie API so that we can query movies with that person
@@ -98,16 +98,16 @@ def getMovieInformation(request, otherparam, requestInfo):
     if len(requestInfo) == 1:
         if "genre" in requestInfo:
             if len(genre_list) > 1:
-                return {"FulfillmentResponse": Response(" and ".join(genre_list))}
+                return Response({"FulfillmentResponse": " and ".join(genre_list)})
             else:
-                return {"FulfillmentResponse": Response(genre_list[0])}
+                return Response({"FulfillmentResponse": genre_list[0]})
         if "directors" in requestInfo:
-            return {"FulfillmentResponse": Response('It was directed by ' + director)}
+            return Response({"FulfillmentResponse": 'It was directed by ' + director})
         if "starring" in requestInfo:
             if len(lead_actors) > 1:
-                return {"FulfillmentResponse": Response('It stars ' + " and ".join(lead_actors))}
+                return Response({"FulfillmentResponse": 'It stars ' + " and ".join(lead_actors)})
             else:
-                return {"FulfillmentResponse": Response('It stars ' + lead_actors[0])}
+                return Response({"FulfillmentResponse": 'It stars ' + lead_actors[0]})
 
     response = "It is"
     if "genre" in requestInfo:
@@ -123,7 +123,7 @@ def getMovieInformation(request, otherparam, requestInfo):
             else:
                 response = response + ", starring " + lead_actors[0]
             
-    return {"FulfillmentResponse": Response(response)}
+    return Response({"FulfillmentResponse": response})
 
 def get_genre_details():
     detail_query = f"https://api.themoviedb.org/3/movie/{current_movie_id}?api_key={api_key}&language=en-US"
