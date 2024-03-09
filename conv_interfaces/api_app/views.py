@@ -80,6 +80,8 @@ def get_person_id(person_query):
     
     r = requests.get(api_query)
     results = json.loads(r.text)['results']
+    if results == []:
+        return None
     return results[0]['id']
 
 @api_view(['GET'])
