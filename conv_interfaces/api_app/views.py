@@ -68,7 +68,7 @@ def getMovieRecommendations(request, otherparam, director, actor, genre):
             where_in_rec_list = 0
 
     if current_recs == []:
-         return JsonResponse({"fulfillmentResponse": {"messages": [{"text": {"genre": None, "director": None, "starring": None, "aggregate_rating": None, "title": None}}]}})
+         return JsonResponse({"fulfillmentResponse": {"messages": [{"text": {"genre": "None", "director": "None", "starring": "None", "aggregate_rating": "None", "title": None}}]}})
 
         #return JsonResponse({"fulfillmentResponse": {"messages": [{"text": {"text": ["No movies matching those details were found "+ original_info]}}]}})
     
