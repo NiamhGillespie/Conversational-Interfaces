@@ -68,12 +68,19 @@ def getMovieRecommendations(request, otherparam, director, actor, genre):
             where_in_rec_list = 0
 
     if current_recs == []:
-        return JsonResponse({"fulfillmentResponse": {"messages": [{"text": {"text": ["No movies matching those details were found "+ original_info]}}]}})
-    
-    movie_details = f"I've found {len(current_recs)} movies for you. How does {current_recs[where_in_rec_list]['title']} sound? It has a rating of {round(current_recs[where_in_rec_list]['vote_average'],2)}."
-    current_movie_id = current_recs[where_in_rec_list]['id']
+         return JsonResponse({"fulfillmentResponse": {"messages": [{"text": {"genre": None, "director": None, "starring": None, "aggregate_rating": None, "title": None}}]}})
 
-    return JsonResponse({"fulfillmentResponse": {"messages": [{"text": {"text": [movie_details]}}]}})
+        #return JsonResponse({"fulfillmentResponse": {"messages": [{"text": {"text": ["No movies matching those details were found "+ original_info]}}]}})
+    
+    #movie_details = f"I've found {len(current_recs)} movies for you. How does {current_recs[where_in_rec_list]['title']} sound? It has a rating of {round(current_recs[where_in_rec_list]['vote_average'],2)}."
+    current_movie_id = current_recs[where_in_rec_list]['id']
+    genres = get_genre_details()
+    lead_actors, director = get_credits()
+    genre_list = []
+    for genre in genres:
+        genre_list.append(genre["name"])
+    
+    return JsonResponse({"fulfillmentResponse": {"messages": [{"text": {"genre": genre_list, "director": director, "starring":lead_actors, "aggregate_rating": round(current_recs[where_in_rec_list]['vote_average'],2), "title":current_recs[where_in_rec_list]['title']}}]}})
 
 def get_person_id(person_query):
     # find the person ID in the movie API so that we can query movies with that person
