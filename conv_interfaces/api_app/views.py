@@ -156,7 +156,7 @@ def get_credits():
 def get_directors(crew):
     directors = []
     for member in crew:
-        if (member['job'] == 'Director' or member['known_for_department'] == 'Directing') and member['name'] not in directors:
+        if (member['job'] == 'Director') and member['name'] not in directors:   # or member['known_for_department'] == 'Directing'
             directors.append(member["name"])
 
     #only return first director
