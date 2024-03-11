@@ -38,7 +38,7 @@ def getMovieRecommendations(request, otherparam, director, actor, genre):
     api_query = f'https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&api_key={api_key}'
 
     #if director != current_director or actor != current_actor or genre != current_genre:
-    original_info = actor + " " + director + " " + genre 
+    original_actor = None
     print([director, actor, genre])
 
     if genre != "$session.params.genre" and genre != "null" and genre != "dontcare":
@@ -50,6 +50,7 @@ def getMovieRecommendations(request, otherparam, director, actor, genre):
         api_query = api_query + f"&with_crew={director}"
 
     if actor != "$session.params.starring" and actor != "null" and actor != "dontcare":
+        original_actor = actor
         actor = get_person_id(actor)
         api_query = api_query + f"&with_cast={actor}"
 
