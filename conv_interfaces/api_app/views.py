@@ -39,13 +39,17 @@ def getMovieRecommendations(request, otherparam, director, actor, genre):
 
     #if director != current_director or actor != current_actor or genre != current_genre:
     original_actor = None
+    original_director = None
+    original_genre = None
     print([director, actor, genre])
 
     if genre != "$session.params.genre" and genre != "null" and genre != "dontcare":
+        original_genre = genre
         genre = genre_dict[genre.lower()]
         api_query = api_query + f"&with_genres={genre}"
 
     if director != "$session.params.director" and director != "null" and director != "dontcare":
+        original_director = director
         director = get_person_id(director)
         api_query = api_query + f"&with_crew={director}"
 
@@ -81,7 +85,7 @@ def getMovieRecommendations(request, otherparam, director, actor, genre):
     for genre in genres:
         genre_list.append(genre["name"])
     
-    return JsonResponse({"fulfillmentResponse": {"messages": [{"text": {"starring": original_actor, "aggregate_rating": round(current_recs[where_in_rec_list]['vote_average'],2), "title":current_recs[where_in_rec_list]['title'], "num_movies": len(current_recs)}}]}})
+    return JsonResponse({"fulfillmentResponse": {"messages": [{"text": {"genre": original_genre, "starring": original_actor, "director": original_director, "aggregate_rating": round(current_recs[where_in_rec_list]['vote_average'],2), "title":current_recs[where_in_rec_list]['title'], "num_movies": len(current_recs)}}]}})
 
 def get_person_id(person_query):
     # find the person ID in the movie API so that we can query movies with that person
