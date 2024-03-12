@@ -85,7 +85,7 @@ def getMovieRecommendations(request, otherparam, director, actor, genre):
     for genre in genres:
         genre_list.append(genre["name"])
     
-    return JsonResponse({"fulfillmentResponse": {"messages": [{"text": {"genre": original_genre, "starring": original_actor, "director": original_director, "aggregate_rating": round(current_recs[where_in_rec_list]['vote_average'],2), "title":current_recs[where_in_rec_list]['title'], "num_movies": len(current_recs)}}]}})
+    return JsonResponse({"fulfillmentResponse": {"messages": [{"text": {"genre": original_genre, "starring": original_actor, "director": original_director, "aggregate_rating": round(current_recs[where_in_rec_list]['vote_average'],2), "title":current_recs[where_in_rec_list]['title'], "num_movies": len(current_recs) - where_in_rec_list}}]}})
 
 def get_person_id(person_query):
     # find the person ID in the movie API so that we can query movies with that person
